@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COLD CULT</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --black:#000;--off-black:#0d0d0d;--dark:#111;--mid:#1a1a1a;
+  --white:#fff;--off-white:#eaeaea;--muted:#bdbdbd;--silver:#d9d9d9;
+  --font-display:'Bebas Neue',cursive;
+  --font-body:'Barlow Condensed',sans-serif;
+  --font-text:'Barlow',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--font-text);overflow-x:hidden;cursor:none}
+.cursor{position:fixed;width:8px;height:8px;background:var(--white);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(255,255,255,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s}
+
+/* TICKER */
+.ticker{background:var(--white);color:var(--black);padding:11px 0;overflow:hidden;position:relative;z-index:50}
+.ticker-inner{display:flex;white-space:nowrap;animation:ticker 22s linear infinite}
+.ticker-item{font-family:var(--font-body);font-size:11px;letter-spacing:4px;text-transform:uppercase;padding:0 48px}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* NAV */
+nav{position:fixed;top:36px;left:0;right:0;z-index:100;padding:0 48px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:var(--font-display);font-size:26px;letter-spacing:5px;color:var(--white);text-decoration:none;mix-blend-mode:difference}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{color:rgba(255,255,255,.55);text-decoration:none;font-family:var(--font-body);font-size:11px;letter-spacing:3px;text-transform:uppercase;transition:color .3s}
+.nav-links a:hover{color:var(--white)}
+.nav-right{display:flex;gap:24px;align-items:center}
+.nav-btn{background:none;border:none;color:var(--white);cursor:none;font-size:15px;letter-spacing:1px;transition:opacity .3s;font-family:var(--font-body)}
+.nav-btn:hover{opacity:.5}
+.cart-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--white);color:var(--black);border-radius:50%;width:16px;height:16px;font-size:9px;font-family:var(--font-body);font-weight:700;margin-left:2px;vertical-align:middle}
+
+/* HERO */
+.hero{position:relative;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:#000;z-index:0}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.28;z-index:1;filter:contrast(1.1)}
+.hero-gradient{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.95) 0%,rgba(0,0,0,.3) 50%,rgba(0,0,0,.6) 100%);z-index:2}
+.hero-grid{position:absolute;inset:0;opacity:.035;background-image:linear-gradient(rgba(255,255,255,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.6) 1px,transparent 1px);background-size:80px 80px;z-index:3}
+.hero-content{position:relative;z-index:10;text-align:center}
+.hero-eyebrow{font-family:var(--font-body);font-size:11px;letter-spacing:8px;text-transform:uppercase;color:var(--muted);margin-bottom:20px;animation:fadeUp .9s ease both}
+.hero-title{font-family:var(--font-display);font-size:clamp(110px,16vw,210px);line-height:.85;letter-spacing:-2px;animation:fadeUp .9s ease .15s both}
+.hero-title .stroke{-webkit-text-stroke:1.5px var(--white);color:transparent}
+.hero-sub{font-family:var(--font-body);font-size:15px;letter-spacing:9px;text-transform:uppercase;color:var(--muted);margin-top:20px;animation:fadeUp .9s ease .3s both}
+.hero-btns{display:flex;gap:14px;margin-top:48px;justify-content:center;animation:fadeUp .9s ease .45s both}
+.btn-primary{background:var(--white);color:var(--black);font-family:var(--font-body);font-size:11px;letter-spacing:4px;text-transform:uppercase;padding:17px 44px;border:none;cursor:pointer;transition:all .3s;font-weight:700}
+.btn-primary:hover{background:var(--silver);transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--white);font-family:var(--font-body);font-size:11px;letter-spacing:4px;text-transform:uppercase;padding:17px 44px;border:1px solid rgba(255,255,255,.28);cursor:pointer;transition:all .3s}
+.btn-outline:hover{border-color:var(--white);transform:translateY(-2px)}
+.hero-side{position:absolute;left:48px;bottom:48px;z-index:10;writing-mode:vertical-rl;font-family:var(--font-body);font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.3);animation:fadeIn 1.5s ease 1s both}
+.hero-side-r{position:absolute;right:48px;bottom:48px;z-index:10;writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--font-body);font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.3);animation:fadeIn 1.5s ease 1s both}
+.scroll-ind{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:10px;animation:fadeUp .9s ease .7s both}
+.scroll-line{width:1px;height:56px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.35));animation:pulse 2s ease infinite}
+.scroll-txt{font-family:var(--font-body);font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.35)}
+@keyframes pulse{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* SECTIONS */
+section{padding:120px 48px}
+.section-label{font-family:var(--font-body);font-size:10px;letter-spacing:6px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.section-title{font-family:var(--font-display);font-size:clamp(60px,8vw,110px);line-height:.88;letter-spacing:-1px}
+.stroke-text{-webkit-text-stroke:1px rgba(255,255,255,.28);color:transparent}
+
+/* MANIFESTO */
+.manifesto{background:var(--off-black);position:relative;overflow:hidden}
+.mani-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:clamp(120px,28vw,400px);color:rgba(255,255,255,.018);white-space:nowrap;pointer-events:none;letter-spacing:-8px;user-select:none}
+.mani-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:1380px;margin:0 auto;position:relative;z-index:2}
+.mani-left .big{font-family:var(--font-display);font-size:clamp(72px,9vw,130px);line-height:.85;margin-bottom:28px}
+.mani-desc{font-family:var(--font-text);font-size:14px;color:var(--muted);line-height:1.9;max-width:360px;font-weight:300}
+.mani-items{display:flex;flex-direction:column;gap:20px}
+.mani-item{border-left:1px solid rgba(255,255,255,.12);padding-left:22px;transition:border-color .3s,padding-left .3s}
+.mani-item:hover{border-color:var(--white);padding-left:28px}
+.mani-num{font-family:var(--font-body);font-size:9px;letter-spacing:4px;color:var(--muted);margin-bottom:6px}
+.mani-text{font-family:var(--font-body);font-size:18px;font-weight:600;letter-spacing:2px;text-transform:uppercase}
+
+/* PRODUCTS */
+.products-sec{background:var(--black)}
+.sec-header{max-width:1380px;margin:0 auto 56px;display:flex;justify-content:space-between;align-items:flex-end}
+.view-all-link{font-family:var(--font-body);font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:3px;transition:color .3s,border-color .3s}
+.view-all-link:hover{color:var(--white);border-color:var(--white)}
+.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;max-width:1380px;margin:0 auto}
+
+/* PRODUCT CARD */
+.prod-card{position:relative;overflow:hidden;aspect-ratio:3/4;background:var(--mid);cursor:pointer}
+.prod-imgs{position:absolute;inset:0}
+.prod-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .5s ease,transform .9s cubic-bezier(.16,1,.3,1)}
+.prod-img.secondary{opacity:0}
+.prod-card:hover .prod-img.primary{opacity:0;transform:scale(1.06)}
+.prod-card:hover .prod-img.secondary{opacity:1;transform:scale(1.03)}
+.prod-card:not(:hover) .prod-img.primary{opacity:1;transform:scale(1)}
+.prod-card:hover .prod-img.only{transform:scale(1.06);opacity:1}
+.prod-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.15) 55%,transparent 100%);opacity:0;transition:opacity .4s}
+.prod-card:hover .prod-overlay{opacity:1}
+.prod-info{position:absolute;bottom:0;left:0;right:0;padding:22px;display:flex;justify-content:space-between;align-items:flex-end;transform:translateY(6px);transition:transform .4s}
+.prod-card:hover .prod-info{transform:translateY(0)}
+.prod-name{font-family:var(--font-body);font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:4px}
+.prod-price{font-family:var(--font-body);font-size:12px;letter-spacing:1px;color:var(--silver)}
+.prod-add{background:var(--white);color:var(--black);border:none;font-family:var(--font-body);font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:10px 14px;cursor:pointer;transform:translateY(14px);opacity:0;transition:all .35s;font-weight:700;white-space:nowrap}
+.prod-card:hover .prod-add{transform:translateY(0);opacity:1}
+.prod-tag{position:absolute;top:14px;left:14px;font-family:var(--font-body);font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:5px 10px;font-weight:700;z-index:5}
+.tag-new{background:var(--white);color:var(--black)}
+.tag-sold{background:rgba(0,0,0,.7);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2)}
+.tag-premium{background:var(--black);color:var(--white);border:1px solid rgba(255,255,255,.3)}
+
+/* COLLECTION CATEGORIES */
+.cats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;max-width:1380px;margin:0 auto}
+.cat-card{position:relative;overflow:hidden;aspect-ratio:2/3;cursor:pointer;background:var(--mid)}
+.cat-img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.16,1,.3,1);filter:brightness(.55)}
+.cat-card:hover .cat-img{transform:scale(1.07);filter:brightness(.4)}
+.cat-overlay{position:absolute;inset:0;display:flex;align-items:flex-end;padding:20px}
+.cat-name{font-family:var(--font-display);font-size:28px;letter-spacing:3px;text-transform:uppercase}
+
+/* FEATURES */
+.features-sec{background:var(--off-black)}
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;max-width:1380px;margin:0 auto}
+.feat-card{background:var(--dark);padding:48px 32px;border:1px solid rgba(255,255,255,.04);transition:all .4s}
+.feat-card:hover{background:#161616;border-color:rgba(255,255,255,.1);transform:translateY(-4px)}
+.feat-num{font-family:var(--font-display);font-size:52px;color:rgba(255,255,255,.07);line-height:1;margin-bottom:20px}
+.feat-name{font-family:var(--font-display);font-size:34px;letter-spacing:2px;margin-bottom:14px}
+.feat-desc{font-family:var(--font-text);font-size:13px;color:var(--muted);line-height:1.75;font-weight:300}
+
+/* GALLERY */
+.gallery-sec{background:var(--black);padding:120px 0}
+.gallery-hdr{padding:0 48px;max-width:1380px;margin:0 auto 56px}
+.gal-grid{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:280px 280px;gap:2px}
+.gal-item{overflow:hidden;position:relative;cursor:pointer}
+.gal-item:nth-child(1){grid-column:span 2;grid-row:span 2}
+.gal-item:nth-child(4){grid-column:span 2}
+.gal-img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.16,1,.3,1);filter:brightness(.75)}
+.gal-item:hover .gal-img{transform:scale(1.06);filter:brightness(.9)}
+
+/* TESTIMONIALS */
+.testi-sec{background:var(--off-black)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:1380px;margin:0 auto}
+.testi-card{background:var(--dark);padding:44px;border:1px solid rgba(255,255,255,.04);transition:border-color .3s}
+.testi-card:hover{border-color:rgba(255,255,255,.1)}
+.testi-stars{color:var(--white);font-size:13px;letter-spacing:3px;margin-bottom:20px}
+.testi-quote{font-family:var(--font-body);font-size:17px;line-height:1.65;color:var(--off-white);margin-bottom:28px;font-style:italic;font-weight:300}
+.testi-author{display:flex;align-items:center;gap:14px}
+.testi-av{width:38px;height:38px;border-radius:50%;background:var(--mid);display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-size:13px;font-weight:700;border:1px solid rgba(255,255,255,.12)}
+.testi-name{font-family:var(--font-body);font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:600}
+.testi-handle{font-family:var(--font-body);font-size:10px;color:var(--muted);margin-top:2px}
+
+/* NEWSLETTER */
+.nl-sec{background:linear-gradient(135deg,#080808 0%,#111 100%);position:relative;overflow:hidden;text-align:center}
+.nl-watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:clamp(160px,30vw,420px);color:rgba(255,255,255,.018);line-height:1;pointer-events:none;letter-spacing:-12px;user-select:none}
+.nl-content{position:relative;z-index:2;max-width:580px;margin:0 auto}
+.nl-title{font-family:var(--font-display);font-size:clamp(64px,8vw,110px);line-height:.88;margin-bottom:20px}
+.nl-sub{font-family:var(--font-body);font-size:13px;letter-spacing:2px;color:var(--muted);margin-bottom:44px;line-height:1.9}
+.nl-form{display:flex;border:1px solid rgba(255,255,255,.18);overflow:hidden;max-width:460px;margin:0 auto}
+.nl-input{flex:1;background:transparent;border:none;color:var(--white);font-family:var(--font-body);font-size:12px;letter-spacing:2px;padding:17px 22px;outline:none}
+.nl-input::placeholder{color:rgba(255,255,255,.28)}
+.nl-btn{background:var(--white);color:var(--black);border:none;font-family:var(--font-body);font-size:10px;letter-spacing:4px;text-transform:uppercase;padding:17px 26px;cursor:pointer;transition:background .3s;font-weight:700}
+.nl-btn:hover{background:var(--silver)}
+.nl-msg{font-family:var(--font-body);font-size:10px;letter-spacing:3px;color:var(--muted);margin-top:14px;min-height:18px}
+
+/* FOOTER */
+footer{background:var(--off-black);padding:80px 48px 36px;border-top:1px solid rgba(255,255,255,.055)}
+.foot-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:64px;max-width:1380px;margin:0 auto 64px}
+.foot-brand{font-family:var(--font-display);font-size:52px;letter-spacing:4px;line-height:.9;margin-bottom:18px}
+.foot-tag{font-family:var(--font-body);font-size:12px;color:var(--muted);letter-spacing:2px;line-height:1.9}
+.foot-col-title{font-family:var(--font-body);font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.foot-links{list-style:none;display:flex;flex-direction:column;gap:11px}
+.foot-links a{color:var(--silver);text-decoration:none;font-family:var(--font-body);font-size:13px;letter-spacing:1px;transition:color .3s}
+.foot-links a:hover{color:var(--white)}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.055);padding-top:28px;display:flex;justify-content:space-between;align-items:center;max-width:1380px;margin:0 auto}
+.foot-copy{font-family:var(--font-body);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.25)}
+.foot-socials{display:flex;gap:20px}
+.foot-soc{font-family:var(--font-body);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.25);text-decoration:none;transition:color .3s}
+.foot-soc:hover{color:var(--white)}
+
+/* CART */
+.cart-drawer{position:fixed;top:0;right:-440px;width:440px;height:100vh;background:var(--off-black);z-index:200;transition:right .45s cubic-bezier(.16,1,.3,1);border-left:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column}
+.cart-drawer.open{right:0}
+.cart-head{padding:28px 32px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center}
+.cart-ttl{font-family:var(--font-display);font-size:30px;letter-spacing:4px}
+.cart-x{background:none;border:none;color:var(--white);cursor:pointer;font-size:18px;opacity:.5;transition:opacity .3s}
+.cart-x:hover{opacity:1}
+.cart-body{flex:1;padding:28px 32px;overflow-y:auto}
+.cart-empty-msg{text-align:center;padding:56px 0;font-family:var(--font-body);color:var(--muted);font-size:14px;letter-spacing:3px;text-transform:uppercase}
+.cart-item{display:flex;gap:14px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.cart-item-img{width:76px;height:96px;object-fit:cover;background:var(--dark);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:12px;letter-spacing:2px;color:rgba(255,255,255,.15)}
+.cart-item-info{flex:1}
+.cart-item-name{font-family:var(--font-body);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;font-weight:600}
+.cart-item-meta{font-family:var(--font-body);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:12px}
+.cart-item-row{display:flex;justify-content:space-between;align-items:center}
+.cart-item-price{font-family:var(--font-body);font-size:14px;letter-spacing:1px}
+.cart-item-rm{background:none;border:none;color:var(--muted);cursor:pointer;font-size:10px;letter-spacing:2px;font-family:var(--font-body);transition:color .3s;text-transform:uppercase}
+.cart-item-rm:hover{color:var(--white)}
+.cart-foot{padding:28px 32px;border-top:1px solid rgba(255,255,255,.07)}
+.cart-total-row{display:flex;justify-content:space-between;font-family:var(--font-body);font-size:15px;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px}
+.cart-checkout-btn{width:100%;background:var(--white);color:var(--black);border:none;font-family:var(--font-body);font-size:11px;letter-spacing:4px;text-transform:uppercase;padding:18px;cursor:pointer;font-weight:700;transition:background .3s}
+.cart-checkout-btn:hover{background:var(--silver)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:150;opacity:0;pointer-events:none;transition:opacity .4s}
+.overlay.active{opacity:1;pointer-events:all}
+
+/* SIZE MODAL */
+.size-modal{position:fixed;bottom:-100%;left:50%;transform:translateX(-50%);width:min(440px,95vw);background:var(--off-black);z-index:210;border:1px solid rgba(255,255,255,.12);padding:32px;transition:bottom .4s cubic-bezier(.16,1,.3,1)}
+.size-modal.open{bottom:32px}
+.size-modal-title{font-family:var(--font-display);font-size:22px;letter-spacing:3px;margin-bottom:4px}
+.size-modal-price{font-family:var(--font-body);font-size:13px;color:var(--muted);letter-spacing:2px;margin-bottom:24px}
+.size-btns{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.size-btn{background:none;border:1px solid rgba(255,255,255,.2);color:var(--white);font-family:var(--font-body);font-size:12px;letter-spacing:2px;padding:10px 20px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.size-btn:hover,.size-btn.active{background:var(--white);color:var(--black);border-color:var(--white)}
+.size-add-btn{width:100%;background:var(--white);color:var(--black);border:none;font-family:var(--font-body);font-size:11px;letter-spacing:4px;text-transform:uppercase;padding:16px;cursor:pointer;font-weight:700;transition:background .3s}
+.size-add-btn:hover{background:var(--silver)}
+.size-close-btn{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;transition:color .3s}
+.size-close-btn:hover{color:var(--white)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+@media(max-width:1100px){
+  .prod-grid,.cats-grid{grid-template-columns:repeat(2,1fr)}
+  .feat-grid{grid-template-columns:repeat(2,1fr)}
+  .testi-grid{grid-template-columns:1fr 1fr}
+  .mani-grid{grid-template-columns:1fr;gap:48px}
+  .foot-top{grid-template-columns:1fr 1fr;gap:40px}
+}
+@media(max-width:680px){
+  nav{padding:0 20px;top:20px}
+  .nav-links{display:none}
+  section{padding:80px 20px}
+  .hero-side,.hero-side-r{display:none}
+  .prod-grid{grid-template-columns:1fr 1fr;gap:1px}
+  .cats-grid{grid-template-columns:repeat(3,1fr)}
+  .feat-grid{grid-template-columns:1fr 1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .gal-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .gal-item:nth-child(1){grid-column:span 2;grid-row:auto}
+  .gal-item:nth-child(4){grid-column:auto}
+  .cart-drawer{width:100%;right:-100%}
+  .foot-top{grid-template-columns:1fr 1fr;gap:32px}
+  .foot-brand{font-size:36px}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+<!-- SIZE MODAL -->
+<div class="size-modal" id="sizeModal">
+  <button class="size-close-btn" onclick="closeSizeModal()">✕</button>
+  <div class="size-modal-title" id="modalName">PRODUCT</div>
+  <div class="size-modal-price" id="modalPrice">0 EGP</div>
+  <div class="size-btns">
+    <button class="size-btn" onclick="selectSize(this,'S')">S</button>
+    <button class="size-btn" onclick="selectSize(this,'M')">M</button>
+    <button class="size-btn" onclick="selectSize(this,'L')">L</button>
+    <button class="size-btn" onclick="selectSize(this,'XL')">XL</button>
+  </div>
+  <button class="size-add-btn" onclick="confirmAdd()">ADD TO CART</button>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <span class="cart-ttl">CART</span>
+    <button class="cart-x" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty-msg" id="cartEmpty">YOUR CART IS EMPTY</div>
+    <div id="cartItems"></div>
+  </div>
+  <div class="cart-foot" id="cartFoot" style="display:none">
+    <div class="cart-total-row"><span>TOTAL</span><span id="cartTotal">0 EGP</span></div>
+    <button class="cart-checkout-btn" onclick="window.open('https://coldcultt.com/cart','_blank')">CHECKOUT</button>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">THE AWAKENING DROP — LIVE NOW</span>
+    <span class="ticker-item">USE CODE CC15 FOR 10% OFF</span>
+    <span class="ticker-item">FREE SHIPPING OVER 2000 EGP</span>
+    <span class="ticker-item">COLD CULT — ENGINEERED FOR THE IRON</span>
+    <span class="ticker-item">NEW ARRIVALS: DRIPPY JERSEY + SHADOW SWEATS</span>
+    <span class="ticker-item">THE AWAKENING DROP — LIVE NOW</span>
+    <span class="ticker-item">USE CODE CC15 FOR 10% OFF</span>
+    <span class="ticker-item">FREE SHIPPING OVER 2000 EGP</span>
+    <span class="ticker-item">COLD CULT — ENGINEERED FOR THE IRON</span>
+    <span class="ticker-item">NEW ARRIVALS: DRIPPY JERSEY + SHADOW SWEATS</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">CC</a>
+  <ul class="nav-links">
+    <li><a href="#tops">TOPS</a></li>
+    <li><a href="#bottoms">BOTTOMS</a></li>
+    <li><a href="#categories">COLLECTIONS</a></li>
+    <li><a href="#about">THE BRAND</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-btn" aria-label="Search">⌕</button>
+    <button class="nav-btn" onclick="openCart()" aria-label="Cart">
+      ◻ <span class="cart-badge" id="cartCount">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <img class="hero-img" src="https://coldcultt.com/cdn/shop/files/Homepage.mobile.jpg?v=1779425705&width=1920" alt="Cold Cult hero" loading="eager" onerror="this.style.display='none'">
+  <div class="hero-gradient"></div>
+  <div class="hero-grid"></div>
+  <span class="hero-side">COLD CULT © 2026</span>
+  <span class="hero-side-r">THE AWAKENING DROP</span>
+  <div class="hero-content">
+    <p class="hero-eyebrow">The Awakening Drop — Live Now</p>
+    <h1 class="hero-title">STAY<br><span class="stroke">COLD.</span></h1>
+    <p class="hero-sub">Discipline Over Motivation.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('tops').scrollIntoView({behavior:'smooth'})">SHOP COLLECTION</button>
+      <button class="btn-outline" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">JOIN THE CULT</button>
+    </div>
+  </div>
+  <div class="scroll-ind">
+    <span class="scroll-txt">SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto" id="about">
+  <div class="mani-watermark">COLD</div>
+  <div class="mani-grid">
+    <div class="mani-left reveal">
+      <div class="section-label">The Mindset</div>
+      <div class="big">THE<br>COLD<br><span class="stroke-text">MENTALITY</span></div>
+      <p class="mani-desc">Cold Cult is not a brand. It's a declaration. Built for those who choose discipline when motivation disappears — who train in silence and let results make the noise.</p>
+    </div>
+    <div class="mani-items">
+      <div class="mani-item reveal d1"><div class="mani-num">01</div><div class="mani-text">Wake up before the world</div></div>
+      <div class="mani-item reveal d2"><div class="mani-num">02</div><div class="mani-text">Train when others quit</div></div>
+      <div class="mani-item reveal d3"><div class="mani-num">03</div><div class="mani-text">Embrace discomfort daily</div></div>
+      <div class="mani-item reveal d4"><div class="mani-num">04</div><div class="mani-text">Build greatness in silence</div></div>
+      <div class="mani-item reveal" style="transition-delay:.5s"><div class="mani-num">05</div><div class="mani-text">Consistency over motivation</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOPS -->
+<section class="products-sec" id="tops">
+  <div class="sec-header reveal">
+    <div><div class="section-label">The Awakening Drop</div><div class="section-title">TOPS</div></div>
+    <a href="https://coldcultt.com/collections/tops" target="_blank" class="view-all-link">SHOP TOPS →</a>
+  </div>
+  <div class="prod-grid">
+    <div class="prod-card reveal" onclick="openSize('DRIPPY JERSEY — BLACK',690)">
+      <div class="prod-imgs">
+        <img class="prod-img primary" src="https://coldcultt.com/cdn/shop/files/IMG_9755.jpg?v=1779423314&width=800" alt="Drippy Jersey Black">
+        <img class="prod-img secondary" src="https://coldcultt.com/cdn/shop/files/IMG_6476.jpg?v=1779423305&width=800" alt="Drippy Jersey Black alt">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info">
+        <div><div class="prod-name">DRIPPY JERSEY — BLACK</div><div class="prod-price">690 EGP</div></div>
+        <button class="prod-add">SELECT SIZE</button>
+      </div>
+      <div class="prod-tag tag-new">NEW</div>
+    </div>
+    <div class="prod-card reveal d1" onclick="openSize('ELEVATED ESSENTIALS — BROWN',390)">
+      <div class="prod-imgs">
+        <img class="prod-img only" src="https://coldcultt.com/cdn/shop/files/IMG_6458_ca726e33-304c-483e-a29a-653945c1657e.jpg?v=1779421273&width=800" alt="Elevated Essentials Brown">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info">
+        <div><div class="prod-name">ELEVATED ESSENTIALS — BROWN</div><div class="prod-price">390 EGP</div></div>
+        <button class="prod-add">SELECT SIZE</button>
+      </div>
+      <div class="prod-tag tag-new">NEW</div>
+    </div>
+    <div class="prod-card reveal d2">
+      <div class="prod-imgs">
+        <img class="prod-img only" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.34_AM.jpg?v=1779438753&width=800" alt="Varisity Jersey Dark Camo">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info"><div><div class="prod-name">VARISITY JERSEY — DARK CAMO</div><div class="prod-price">790 EGP</div></div></div>
+      <div class="prod-tag tag-sold">SOLD OUT</div>
+    </div>
+    <div class="prod-card reveal d3">
+      <div class="prod-imgs">
+        <img class="prod-img only" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.35_AM_2.jpg?v=1779438772&width=800" alt="Big Wolf Tees Black">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info"><div><div class="prod-name">BIG WOLF TEES — BLACK</div><div class="prod-price">750 EGP</div></div></div>
+      <div class="prod-tag tag-sold">SOLD OUT</div>
+    </div>
+    <div class="prod-card reveal">
+      <div class="prod-imgs">
+        <img class="prod-img primary" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.36_AM_1.jpg?v=1779440306&width=800" alt="Big Wolf Tees Gray">
+        <img class="prod-img secondary" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.35_AM_3.jpg?v=1779438766&width=800" alt="Big Wolf Tees Gray alt">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info"><div><div class="prod-name">BIG WOLF TEES — GRAY</div><div class="prod-price">750 EGP</div></div></div>
+      <div class="prod-tag tag-sold">SOLD OUT</div>
+    </div>
+    <div class="prod-card reveal d1">
+      <div class="prod-imgs">
+        <img class="prod-img only" src="https://coldcultt.com/cdn/shop/files/3_65c92fa4-e521-4379-9ea7-ca4f0c5958a2.png?v=1779428676&width=800" alt="Revenge Cut-Off Black">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info"><div><div class="prod-name">REVENGE CUT-OFF — BLACK</div><div class="prod-price">680 EGP</div></div></div>
+      <div class="prod-tag tag-sold">SOLD OUT</div>
+    </div>
+    <div class="prod-card reveal d2">
+      <div class="prod-imgs">
+        <img class="prod-img only" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.37_AM_3.jpg?v=1779438759&width=800" alt="Revenge Cut-Off Gray">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info"><div><div class="prod-name">REVENGE CUT-OFF — GRAY</div><div class="prod-price">680 EGP</div></div></div>
+      <div class="prod-tag tag-sold">SOLD OUT</div>
+    </div>
+    <div class="prod-card reveal d3">
+      <div class="prod-imgs">
+        <img class="prod-img primary" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.32_AM.jpg?v=1779438772&width=800" alt="Varisity Jersey Light Camo">
+        <img class="prod-img secondary" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.32_AM_2.jpg?v=1779438773&width=800" alt="Varisity Jersey Light Camo alt">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info"><div><div class="prod-name">VARISITY JERSEY — LIGHT CAMO</div><div class="prod-price">790 EGP</div></div></div>
+      <div class="prod-tag tag-sold">SOLD OUT</div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOMS -->
+<section class="products-sec" style="background:var(--off-black)" id="bottoms">
+  <div class="sec-header reveal">
+    <div><div class="section-label">The Awakening Drop</div><div class="section-title">BOTTOMS</div></div>
+    <a href="https://coldcultt.com/collections/bottom" target="_blank" class="view-all-link">SHOP BOTTOMS →</a>
+  </div>
+  <div class="prod-grid">
+    <div class="prod-card reveal" onclick="openSize('CLASSIC SWEATS — BURGUNDY',930)">
+      <div class="prod-imgs">
+        <img class="prod-img only" src="https://coldcultt.com/cdn/shop/files/IMG_6444.jpg?v=1779425107&width=800" alt="Classic Sweats Burgundy">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info">
+        <div><div class="prod-name">CLASSIC SWEATS — BURGUNDY</div><div class="prod-price">930 EGP</div></div>
+        <button class="prod-add">SELECT SIZE</button>
+      </div>
+      <div class="prod-tag tag-new">NEW</div>
+    </div>
+    <div class="prod-card reveal d1" onclick="openSize('SHADOW SWEATS — WASHED BROWN',1290)">
+      <div class="prod-imgs">
+        <img class="prod-img primary" src="https://coldcultt.com/cdn/shop/files/Gemini_Generated_Image_myz05gmyz05gmyz0.png?v=1779460387&width=800" alt="Shadow Sweats Washed Brown">
+        <img class="prod-img secondary" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.18.34_AM.jpg?v=1779438770&width=800" alt="Shadow Sweats Washed Brown alt">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info">
+        <div><div class="prod-name">SHADOW SWEATS — WASHED BROWN</div><div class="prod-price">1,290 EGP</div></div>
+        <button class="prod-add">SELECT SIZE</button>
+      </div>
+      <div class="prod-tag tag-premium">PREMIUM</div>
+    </div>
+    <div class="prod-card reveal d2" onclick="openSize('CLASSIC SWEATS — GREY',930)">
+      <div class="prod-imgs">
+        <img class="prod-img primary" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.18.36_AM_1.jpg?v=1779440494&width=800" alt="Classic Sweats Grey">
+        <img class="prod-img secondary" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.18.36_AM_2.jpg?v=1779438772&width=800" alt="Classic Sweats Grey alt">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info">
+        <div><div class="prod-name">CLASSIC SWEATS — GREY</div><div class="prod-price">930 EGP</div></div>
+        <button class="prod-add">SELECT SIZE</button>
+      </div>
+      <div class="prod-tag tag-new">NEW</div>
+    </div>
+    <div class="prod-card reveal d3">
+      <div class="prod-imgs">
+        <img class="prod-img only" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.23_AM.jpg?v=1779438750&width=800" alt="Classic Sweats Black">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info"><div><div class="prod-name">CLASSIC SWEATS — BLACK</div><div class="prod-price">930 EGP</div></div></div>
+      <div class="prod-tag tag-sold">SOLD OUT</div>
+    </div>
+    <div class="prod-card reveal">
+      <div class="prod-imgs">
+        <img class="prod-img only" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.34_AM_1.jpg?v=1779438771&width=800" alt="Shadow Sweats Washed Grey">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info"><div><div class="prod-name">SHADOW SWEATS — WASHED GREY</div><div class="prod-price">1,290 EGP</div></div></div>
+      <div class="prod-tag tag-sold">SOLD OUT</div>
+    </div>
+    <div class="prod-card reveal d1">
+      <div class="prod-imgs">
+        <img class="prod-img only" src="https://coldcultt.com/cdn/shop/files/IMG_6463_983d2c25-9beb-4b48-abb6-6cf6478ba2dd.jpg?v=1779421296&width=800" alt="Elevated Essentials Black">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info"><div><div class="prod-name">ELEVATED ESSENTIALS — BLACK</div><div class="prod-price">390 EGP</div></div></div>
+      <div class="prod-tag tag-sold">SOLD OUT</div>
+    </div>
+    <div class="prod-card reveal d2">
+      <div class="prod-imgs">
+        <img class="prod-img only" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.30_AM_5.jpg?v=1779438752&width=800" alt="Elevated Essentials White">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info"><div><div class="prod-name">ELEVATED ESSENTIALS — WHITE</div><div class="prod-price">390 EGP</div></div></div>
+      <div class="prod-tag tag-sold">SOLD OUT</div>
+    </div>
+    <div class="prod-card reveal d3">
+      <div class="prod-imgs">
+        <img class="prod-img only" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.26_AM.jpg?v=1779438751&width=800" alt="Elevated Essentials Gray">
+      </div>
+      <div class="prod-overlay"></div>
+      <div class="prod-info"><div><div class="prod-name">ELEVATED ESSENTIALS — GRAY</div><div class="prod-price">390 EGP</div></div></div>
+      <div class="prod-tag tag-sold">SOLD OUT</div>
+    </div>
+  </div>
+</section>
+
+<!-- COLLECTIONS -->
+<section class="products-sec" id="categories" style="padding-bottom:0">
+  <div class="sec-header reveal">
+    <div><div class="section-label">Browse By</div><div class="section-title">COLLECTIONS</div></div>
+  </div>
+  <div class="cats-grid">
+    <div class="cat-card reveal" onclick="window.open('https://coldcultt.com/collections/tanks','_blank')">
+      <img class="cat-img" src="https://coldcultt.com/cdn/shop/collections/WhatsApp_Image_2026-05-22_at_10.23.42_AM_1.jpg?v=1779437164&width=800" alt="Tanks">
+      <div class="cat-overlay"><span class="cat-name">TANKS</span></div>
+    </div>
+    <div class="cat-card reveal d1" onclick="window.open('https://coldcultt.com/collections/pumpcover','_blank')">
+      <img class="cat-img" src="https://coldcultt.com/cdn/shop/collections/WhatsApp_Image_2026-05-22_at_10.23.42_AM.jpg?v=1779437695&width=800" alt="Pump Cover">
+      <div class="cat-overlay"><span class="cat-name">PUMP COVER</span></div>
+    </div>
+    <div class="cat-card reveal d2" onclick="window.open('https://coldcultt.com/collections/tops','_blank')">
+      <img class="cat-img" src="https://coldcultt.com/cdn/shop/collections/Tshirts.jpg?v=1779437716&width=800" alt="Tops">
+      <div class="cat-overlay"><span class="cat-name">TOPS</span></div>
+    </div>
+    <div class="cat-card reveal d3" onclick="window.open('https://coldcultt.com/collections/jersey','_blank')">
+      <img class="cat-img" src="https://coldcultt.com/cdn/shop/collections/WhatsApp_Image_2026-05-22_at_10.23.42_AM_2.jpg?v=1779437276&width=800" alt="Jerseys">
+      <div class="cat-overlay"><span class="cat-name">JERSEYS</span></div>
+    </div>
+    <div class="cat-card reveal d4" onclick="window.open('https://coldcultt.com/collections/bottom','_blank')">
+      <img class="cat-img" src="https://coldcultt.com/cdn/shop/collections/IMG_9857_2.jpg?v=1779427985&width=800" alt="Bottoms">
+      <div class="cat-overlay"><span class="cat-name">BOTTOMS</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-sec">
+  <div class="sec-header reveal" style="max-width:1380px;margin:0 auto 72px">
+    <div><div class="section-label">Why Cold Cult</div><div class="section-title">THE<br><span class="stroke-text">DIFFERENCE</span></div></div>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card reveal"><div class="feat-num">01</div><div class="feat-name">DISCIPLINE</div><p class="feat-desc">Built for people who never skip. Every stitch engineered for the ones who show up when motivation is gone.</p></div>
+    <div class="feat-card reveal d1"><div class="feat-num">02</div><div class="feat-name">QUALITY</div><p class="feat-desc">Premium heavyweight materials. Fabrics that hold their form through every rep, every wash, every season.</p></div>
+    <div class="feat-card reveal d2"><div class="feat-num">03</div><div class="feat-name">PERFORMANCE</div><p class="feat-desc">Engineered for training. Designed for the streets. Worn by athletes who demand more from their gear.</p></div>
+    <div class="feat-card reveal d3"><div class="feat-num">04</div><div class="feat-name">IDENTITY</div><p class="feat-desc">Wear the mindset. Cold Cult isn't what you put on — it's who you are when the world is watching.</p></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-sec">
+  <div class="gallery-hdr reveal">
+    <div class="section-label">The Cult</div>
+    <div class="section-title">COMMUNITY</div>
+  </div>
+  <div class="gal-grid">
+    <div class="gal-item"><img class="gal-img" src="https://coldcultt.com/cdn/shop/files/IMG_9755.jpg?v=1779423314&width=1000" alt="Gallery 1"></div>
+    <div class="gal-item"><img class="gal-img" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.18.36_AM_2.jpg?v=1779438772&width=600" alt="Gallery 2"></div>
+    <div class="gal-item"><img class="gal-img" src="https://coldcultt.com/cdn/shop/files/IMG_6444.jpg?v=1779425107&width=600" alt="Gallery 3"></div>
+    <div class="gal-item"><img class="gal-img" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.37_AM_3.jpg?v=1779438759&width=800" alt="Gallery 4"></div>
+    <div class="gal-item"><img class="gal-img" src="https://coldcultt.com/cdn/shop/files/3_65c92fa4-e521-4379-9ea7-ca4f0c5958a2.png?v=1779428676&width=600" alt="Gallery 5"></div>
+    <div class="gal-item"><img class="gal-img" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.32_AM.jpg?v=1779438772&width=600" alt="Gallery 6"></div>
+    <div class="gal-item"><img class="gal-img" src="https://coldcultt.com/cdn/shop/files/WhatsApp_Image_2026-05-22_at_10.20.34_AM_1.jpg?v=1779438771&width=600" alt="Gallery 7"></div>
+  </div>
+  <div style="text-align:center;margin-top:40px;padding:0 48px">
+    <p style="font-family:var(--font-body);font-size:11px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Tag us in your photos</p>
+    <p style="font-family:var(--font-display);font-size:32px;letter-spacing:6px;color:var(--white)">@COLDCULTTT</p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-sec">
+  <div class="sec-header reveal" style="max-width:1380px;margin:0 auto 64px;display:flex;justify-content:space-between;align-items:flex-end">
+    <div><div class="section-label">What They Say</div><div class="section-title">THE CULT<br><span class="stroke-text">SPEAKS</span></div></div>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"These pieces hit different. The quality is unmatched — everything from the stitching to the fabric weight screams premium. I've thrown out every other brand."</p>
+      <div class="testi-author"><div class="testi-av">MA</div><div><div class="testi-name">MAHMOUD A.</div><div class="testi-handle">@mah_lifts</div></div></div>
+    </div>
+    <div class="testi-card reveal d1">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"Wore the Drippy Jersey to training and got stopped five times. Cold Cult doesn't just dress you — it makes a statement before you even open your mouth."</p>
+      <div class="testi-author"><div class="testi-av">KO</div><div><div class="testi-name">KARIM O.</div><div class="testi-handle">@karimodefit</div></div></div>
+    </div>
+    <div class="testi-card reveal d2">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"Shadow Sweats are criminally comfortable. Gym to street without changing. This is what it means to engineer for performance AND style."</p>
+      <div class="testi-author"><div class="testi-av">YS</div><div><div class="testi-name">YOUSSEF S.</div><div class="testi-handle">@youssef.strong</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="nl-sec">
+  <div class="nl-watermark">CC</div>
+  <div class="nl-content reveal">
+    <div class="section-label" style="text-align:center;margin-bottom:20px">EXCLUSIVE ACCESS</div>
+    <h2 class="nl-title">ENTER<br>THE CULT.</h2>
+    <p class="nl-sub">Join for exclusive drops, limited releases,<br>early access, and the mindset that comes with it.</p>
+    <div class="nl-form">
+      <input class="nl-input" type="email" id="emailInput" placeholder="YOUR EMAIL ADDRESS">
+      <button class="nl-btn" onclick="submitEmail()">JOIN</button>
+    </div>
+    <p class="nl-msg" id="emailMsg"></p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-top">
+    <div>
+      <div class="foot-brand">COLD<br>CULT</div>
+      <p class="foot-tag">Engineered for the iron.<br>Styled for the streets.<br>Worn by the relentless.</p>
+    </div>
+    <div>
+      <div class="foot-col-title">SHOP</div>
+      <ul class="foot-links">
+        <li><a href="https://coldcultt.com/collections/all" target="_blank">All Products</a></li>
+        <li><a href="https://coldcultt.com/collections/tops" target="_blank">Tops</a></li>
+        <li><a href="https://coldcultt.com/collections/bottom" target="_blank">Bottoms</a></li>
+        <li><a href="https://coldcultt.com/collections/jersey" target="_blank">Jerseys</a></li>
+        <li><a href="https://coldcultt.com/collections/tanks" target="_blank">Tanks</a></li>
+        <li><a href="https://coldcultt.com/collections/pumpcover" target="_blank">Pump Covers</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="foot-col-title">INFO</div>
+      <ul class="foot-links">
+        <li><a href="https://coldcultt.com/pages/size-charts" target="_blank">Size Charts</a></li>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScl_cwvlhzPKo7Ilz-wVRHIe2xzg9-R1D1wR3n6km7HY6yXHw/viewform" target="_blank">Exchange Item</a></li>
+        <li><a href="https://coldcultt.com/policies/privacy-policy" target="_blank">Privacy Policy</a></li>
+        <li><a href="https://coldcultt.com/policies/terms-of-service" target="_blank">Terms of Service</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="foot-col-title">CONNECT</div>
+      <ul class="foot-links">
+        <li><a href="https://coldcultt.com" target="_blank">coldcultt.com</a></li>
+        <li><a href="#" target="_blank">Instagram</a></li>
+        <li><a href="#" target="_blank">TikTok</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span class="foot-copy">COLD CULT © 2026 — ALL RIGHTS RESERVED</span>
+    <div class="foot-socials">
+      <a href="#" class="foot-soc">INSTAGRAM</a>
+      <a href="#" class="foot-soc">TIKTOK</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* CURSOR */
+const cur=document.getElementById('cursor');
+const ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function animRing(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);})();
+document.querySelectorAll('button,a,.prod-card,.cat-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.width='52px';ring.style.height='52px';ring.style.borderColor='rgba(255,255,255,.7)';});
+  el.addEventListener('mouseleave',()=>{ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(255,255,255,.35)';});
+});
+
+/* CART */
+const cart=[];
+function openCart(){document.getElementById('cartDrawer').classList.add('open');document.getElementById('overlay').classList.add('active');}
+function closeCart(){document.getElementById('cartDrawer').classList.remove('open');if(!document.getElementById('sizeModal').classList.contains('open'))document.getElementById('overlay').classList.remove('active');}
+function closeAll(){closeSizeModal();closeCart();}
+
+/* SIZE MODAL */
+let pendingProduct=null,selectedSize=null;
+function openSize(name,price){
+  pendingProduct={name,price};selectedSize=null;
+  document.getElementById('modalName').textContent=name;
+  document.getElementById('modalPrice').textContent=price.toLocaleString()+' EGP';
+  document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sizeModal').classList.add('open');
+  document.getElementById('overlay').classList.add('active');
+}
+function closeSizeModal(){document.getElementById('sizeModal').classList.remove('open');if(!document.getElementById('cartDrawer').classList.contains('open'))document.getElementById('overlay').classList.remove('active');}
+function selectSize(btn,size){selectedSize=size;document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function confirmAdd(){
+  if(!selectedSize){alert('Please select a size');return;}
+  if(!pendingProduct)return;
+  const ex=cart.find(i=>i.name===pendingProduct.name&&i.size===selectedSize);
+  if(ex)ex.qty++;else cart.push({name:pendingProduct.name,price:pendingProduct.price,size:selectedSize,qty:1});
+  updateCart();closeSizeModal();openCart();
+}
+function removeFromCart(i){cart.splice(i,1);updateCart();}
+function updateCart(){
+  const count=cart.reduce((a,i)=>a+i.qty,0);
+  const total=cart.reduce((a,i)=>a+i.price*i.qty,0);
+  document.getElementById('cartCount').textContent=count;
+  const itemsEl=document.getElementById('cartItems');
+  const emptyEl=document.getElementById('cartEmpty');
+  const footEl=document.getElementById('cartFoot');
+  if(!cart.length){emptyEl.style.display='block';itemsEl.innerHTML='';footEl.style.display='none';}
+  else{
+    emptyEl.style.display='none';footEl.style.display='block';
+    document.getElementById('cartTotal').textContent=total.toLocaleString()+' EGP';
+    itemsEl.innerHTML=cart.map((item,i)=>`
+      <div class="cart-item">
+        <div class="cart-item-img">CC</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-meta">SIZE: ${item.size} &middot; QTY: ${item.qty}</div>
+          <div class="cart-item-row">
+            <span class="cart-item-price">${(item.price*item.qty).toLocaleString()} EGP</span>
+            <button class="cart-item-rm" onclick="removeFromCart(${i})">REMOVE</button>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+/* EMAIL */
+function submitEmail(){
+  const v=document.getElementById('emailInput').value;
+  const m=document.getElementById('emailMsg');
+  if(!v||!v.includes('@')){m.textContent='ENTER A VALID EMAIL.';return;}
+  m.textContent='WELCOME TO THE CULT. CHECK YOUR INBOX.';
+  document.getElementById('emailInput').value='';
+  setTimeout(()=>m.textContent='',5000);
+}
+
+/* REVEAL */
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
